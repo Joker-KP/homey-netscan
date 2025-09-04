@@ -39,7 +39,7 @@
       }
     ]
   },
-  "compatibility": ">=5.0.0",
+  "compatibility": ">=12.2.0",
   "sdk": 3,
   "brandColor": "#FF7D4B",
   "author": {
@@ -268,23 +268,22 @@
       ],
       "class": "sensor",
       "capabilities": [
-        "alarm_offline",
+        "alarm_connectivity",
         "onoff"
       ],
       "capabilitiesOptions": {
-        "alarm_offline": {
-          "titleTrue": {
-            "en": "Offline",
-            "nl": "Offline",
-            "de": "Offline"
+        "alarm_connectivity": {
+          "insightsTitleFalse": {
+            "en": "Connection restored",
+            "pl": "Połączenie przywrócono"
           },
-          "titleFalse": {
-            "en": "Online",
-            "nl": "Online",
-            "de": "Online"
+          "insightsTitleTrue": {
+            "en": "Connection lost",
+            "pl": "Utracono połączenie"
           }
         },
         "onoff": {
+          "preventInsights": true,
           "uiComponent": null
         }
       },
@@ -326,6 +325,8 @@
               "hint": "Time between checks for the device",
               "type": "number",
               "value": 15,
+              "min": 5,
+              "max": 1000,
               "units": "seconds",
               "label": {
                 "en": "Check Interval",
@@ -338,6 +339,8 @@
               "hint": "Time to wait before reporting the device is offline",
               "type": "number",
               "value": 10,
+              "min": 5,
+              "max": 100,
               "units": "seconds",
               "label": {
                 "en": "Check Timeout",
@@ -350,6 +353,8 @@
               "hint": "Number of unreachable failures before reporting the device is offline",
               "type": "number",
               "value": 1,
+              "min": 1,
+              "max": 100,
               "label": {
                 "en": "Unreachable checks",
                 "nl": "Onbereikbare controles",
@@ -375,23 +380,22 @@
       ],
       "class": "sensor",
       "capabilities": [
-        "alarm_offline",
+        "alarm_connectivity",
         "onoff"
       ],
       "capabilitiesOptions": {
-        "alarm_offline": {
-          "titleTrue": {
-            "en": "Offline",
-            "nl": "Offline",
-            "de": "Offline"
+        "alarm_connectivity": {
+          "insightsTitleFalse": {
+            "en": "Connection restored",
+            "pl": "Połączenie przywrócono"
           },
-          "titleFalse": {
-            "en": "Online",
-            "nl": "Online",
-            "de": "Online"
+          "insightsTitleTrue": {
+            "en": "Connection lost",
+            "pl": "Utracono połączenie"
           }
         },
         "onoff": {
+          "preventInsights": true,
           "uiComponent": null
         }
       },
@@ -457,6 +461,8 @@
               },
               "type": "number",
               "value": 15,
+              "min": 5,
+              "max": 100,
               "units": "seconds",
               "label": {
                 "en": "Check Interval",
@@ -473,6 +479,8 @@
               },
               "type": "number",
               "value": 10,
+              "min": 5,
+              "max": 1000,
               "units": "seconds",
               "label": {
                 "en": "Check Timeout",
@@ -489,6 +497,8 @@
               },
               "type": "number",
               "value": 1,
+              "min": 1,
+              "max": 100,
               "label": {
                 "en": "Unreachable checks",
                 "nl": "Onbereikbare controles",
@@ -500,29 +510,5 @@
       ],
       "id": "tcp_driver"
     }
-  ],
-  "capabilities": {
-    "alarm_offline": {
-      "type": "boolean",
-      "title": {
-        "en": "IP reachable",
-        "nl": "IP bereikbaar",
-        "de": "IP erreichbar"
-      },
-      "getable": true,
-      "setable": false,
-      "insights": true,
-      "insightsTitleFalse": {
-        "en": "IP is reachable",
-        "nl": "IP ist bereikbaar",
-        "de": "IP ist erreichbar"
-      },
-      "insightsTitleTrue": {
-        "en": "IP not reachable",
-        "nl": "IP nicht bereikbaar",
-        "de": "IP ist nicht erreichbar"
-      },
-      "icon": "/assets/sonar.svg"
-    }
-  }
+  ]
 }

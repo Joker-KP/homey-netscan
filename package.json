@@ -7,7 +7,7 @@
         "nodemailer": "^6.7.2"
     },
     "devDependencies": {
-        "homey": "^3.7.15"
+        "homey": "^3.9.4"
     },
     "repository": {
         "type": "git",
