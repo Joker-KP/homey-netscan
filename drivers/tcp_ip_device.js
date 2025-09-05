@@ -44,14 +44,33 @@ class TcpIpDevice extends Homey.Device {
         this.actionInterval = this.getSetting('host_check_interval');
         this.hostTimeout = this.getSetting('host_timeout');
         this.maxUnreachableAttempts = this.getSetting('host_unreachable_checks');
+
+        // guards for critical settings
+        if (!this.host || typeof this.host !== 'string' || this.host.trim() === '') {
+            this.homey.app.updateLog(`Invalid host setting for device ${this.getName()}`, 0);
+            this.host = '0.0.0.0'; // fallback
+        }
+        if (this.port !== null && (typeof this.port !== 'number' || this.port < 1 || this.port > 65535)) {
+            this.homey.app.updateLog(`Invalid port setting for device ${this.getName()}`, 0);
+            this.port = null;
+        }
+        if (typeof this.actionInterval !== 'number' || this.actionInterval < 5) {
+            this.actionInterval = 15; // default
+        }
+        if (typeof this.hostTimeout !== 'number' || this.hostTimeout < 2) {
+            this.hostTimeout = 10; // default
+        }
+        if (typeof this.maxUnreachableAttempts !== 'number' || this.maxUnreachableAttempts < 1) {
+            this.maxUnreachableAttempts = 1; // default
+        }
     }
 
     deviceName() {
-        return this.getName() + " - " + this.host + (this.hasPortDefined() ? (": " + this.port) : "")
+        return this.getName() + " - " + this.host + (this.hasValidPort() ? (": " + this.port) : "")
     }
 
-    hasPortDefined() {
-        return this.getSetting('tcp_port') !== null
+    hasValidPort() {
+        return this.port !== null
     }
 
     allAttemptsExhuusted() {
@@ -102,7 +121,7 @@ class TcpIpDevice extends Homey.Device {
 
     processPingResult(res) {
         let isOnline = res.online
-        if (res.reason === "refused" && !this.hasPortDefined())
+        if (res.reason === "refused" && !this.hasValidPort())
             isOnline = true;  // this is expected behaviour for devices without any open port
         if (res.reason === "timeout")
             this.homey.app.updateLog(`Device Timeout ${this.deviceName()}`);
@@ -115,11 +134,15 @@ class TcpIpDevice extends Homey.Device {
     }
 
     periodicAction = async () => {
-        const prefix = this.hasPortDefined() ? "IP" : "TCP";
+        if (!this.host || this.host === '0.0.0.0') {
+            this.homey.app.updateLog(`Skipping check for device ${this.getName()}: invalid host`, 0);
+            return;
+        }
+        const prefix = this.hasValidPort() ? "IP" : "TCP";
         this.homey.app.updateLog(`Checking ${prefix} device ${this.deviceName()}`);
 
-        const default_port = 1
-        const res = await this.tcpPing(this.host, this.port || default_port, this.hostTimeout);
+        const defaultPort = 1
+        const res = await this.tcpPing(this.host, this.port || defaultPort, this.hostTimeout);
         this.processPingResult(res)
 
         let delay = this.withJitter(this.actionInterval * 1000)

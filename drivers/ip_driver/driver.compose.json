@@ -83,7 +83,7 @@
                     "hint": "Time to wait before reporting the device is offline",
                     "type": "number",
                     "value": 10,
-                    "min": 5,
+                    "min": 2,
                     "max": 100,
                     "units": "seconds",
                     "label": {
