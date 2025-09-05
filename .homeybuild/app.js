@@ -1,185 +1,123 @@
 "use strict";
-if (process.env.DEBUG === '1')
-{
+if (process.env.DEBUG === '1') {
     require('inspector').open(9221, '0.0.0.0', true);
 }
 
 const Homey = require('homey');
 const nodemailer = require("nodemailer");
 
-class netScanApp extends Homey.App
-{
-    async onInit()
-    {
-        this.diagLog = "";
-        this.logLevel = this.homey.settings.get('logLevel');
-        if (this.logLevel === null)
-        {
-            this.logLevel = 0;
-            this.homey.settings.set('logLevel', this.logLevel);
-        }
+class netScanApp extends Homey.App {
+    async onInit() {
+        this.diagLog = '';
+        this.logLevel = this.homey.settings.get('logLevel') ?? 0;
+        this.homey.settings.set('logLevel', this.logLevel);
 
-        let ip_device_is_online_condition = this.homey.flow.getConditionCard('ip_device_is_online');
-        ip_device_is_online_condition.registerRunListener(async (args, state) =>
-        {
-            return !args.device.offline; // true or false
-        });
+        // helper to register simple online/offline conditions
+        const registerDevice = (cardId, expectOnline) => {
+            this.homey.flow
+                .getConditionCard(cardId)
+                .registerRunListener(async (args, state) => {
+                    return expectOnline ? !!args.device.wasOnline : !args.device.wasOnline
+                });
+        };
+        registerDevice('ip_device_is_online', true);
+        registerDevice('ip_device_is_offline', false);
+        registerDevice('device_is_online', true);
+        registerDevice('device_is_offline', false);
 
-        let ip_device_is_offline_condition = this.homey.flow.getConditionCard('ip_device_is_offline');
-        ip_device_is_offline_condition.registerRunListener(async (args, state) =>
-        {
-            return args.device.offline; // true or false
-        });
-
-        let device_is_online_condition = this.homey.flow.getConditionCard('device_is_online');
-        device_is_online_condition.registerRunListener(async (args, state) =>
-        {
-            return !args.device.offline; // true or false
-        });
-
-        let device_is_offline_condition = this.homey.flow.getConditionCard('device_is_offline');
-        device_is_offline_condition.registerRunListener(async (args, state) =>
-        {
-            return args.device.offline; // true or false
-        });
-
-        this.homey.on('cpuwarn', () =>
-        {
+        // on CPU warning: ask all devices to slow down if they expose slowDown()
+        this.homey.on('cpuwarn', () => {
             const drivers = this.homey.drivers.getDrivers();
-            for (const driver in drivers)
-            {
+            for (const driver in drivers) {
                 let devices = this.homey.drivers.getDriver(driver).getDevices();
-
-                for (let i = 0; i < devices.length; i++)
-                {
+                for (let i = 0; i < devices.length; i++) {
                     let device = devices[i];
-                    if (device.slowDown)
-                    {
-                        device.slowDown();
-                    }
+                    device.slowDown?.();
                 }
             }
-
             this.homey.app.updateLog('cpuwarn!');
         });
 
-        // Callback for app settings changed
-        this.homey.settings.on('set', async function(setting)
-        {
-            this.homey.app.updateLog("Setting " + setting + " has changed.");
-
-            if (setting === 'logLevel')
-            {
-                this.homey.app.logLevel = this.homey.settings.get('logLevel');
+        // callback for app settings changed
+        this.homey.settings.on('set', (setting) => {
+            this.homey.app.updateLog(`Setting ${setting} has changed.`);
+            if (setting === 'logLevel') {
+                this.homey.app.logLevel = this.homey.settings.get('logLevel') ?? 0;
             }
         });
     }
 
-    varToString(source)
-    {
-        try
-        {
-            if (source === null)
-            {
-                return "null";
+    circularReplacer = () => {
+        const seen = new WeakSet();
+        return (_key, value) => {
+            if (value && typeof value === 'object') {
+                if (seen.has(value)) return '[Circular]';
+                seen.add(value);
             }
-            if (source === undefined)
-            {
-                return "undefined";
-            }
-            if (source instanceof Error)
-            {
-                let stack = source.stack.replace('/\\n/g', '\n');
-                return source.message + '\n' + stack;
-            }
-            if (typeof(source) === "object")
-            {
-                const getCircularReplacer = () =>
-                {
-                    const seen = new WeakSet();
-                    return (key, value) =>
-                    {
-                        if (typeof value === "object" && value !== null)
-                        {
-                            if (seen.has(value))
-                            {
-                                return;
-                            }
-                            seen.add(value);
-                        }
-                        return value;
-                    };
-                };
-
-                return JSON.stringify(source, getCircularReplacer(), 2);
-            }
-            if (typeof(source) === "string")
-            {
-                return source;
-            }
-        }
-        catch (err)
-        {
-            this.homey.app.updateLog("VarToString Error: " + this.homey.app.varToString(err), 0);
-        }
-
-        return source.toString();
+            return value;
+        };
     }
 
-    updateLog(newMessage, errorLevel = 1)
-    {
-        const zeroPad = (num, places) => String(num).padStart(places, '0');
+    varToString(source) {
+        try {
+            // null or undefined
+            if (source == null) return String(source);
 
-        if (errorLevel <= this.homey.app.logLevel)
-        {
-            console.log(newMessage);
-
-            const nowTime = new Date(Date.now());
-
-            this.diagLog += zeroPad(nowTime.getHours().toString(), 2);
-            this.diagLog += ":";
-            this.diagLog += zeroPad(nowTime.getMinutes().toString(), 2);
-            this.diagLog += ":";
-            this.diagLog += zeroPad(nowTime.getSeconds().toString(), 2);
-            this.diagLog += ".";
-            this.diagLog += zeroPad(nowTime.getMilliseconds().toString(), 3);
-            this.diagLog += ": ";
-
-            if (errorLevel === 0)
-            {
-                this.diagLog += "!!!!!! ";
+            // Error objects
+            if (source instanceof Error) {
+                const stack = String(source.stack || '').replace(/\r?\n/g, '\n');
+                return `${source.name}: ${source.message}${stack ? `\n${stack}` : ''}`;
             }
-            else
-            {
-                this.diagLog += "* ";
+
+            // strings pass through
+            if (typeof source === 'string') return source;
+
+            // objects (pretty JSON, circular-safe)
+            if (typeof source === 'object') {
+                return JSON.stringify(source, circularReplacer(), 2);
             }
-            this.diagLog += newMessage;
-            this.diagLog += "\r\n";
-            if (this.diagLog.length > 60000)
-            {
-                this.diagLog = this.diagLog.substr(this.diagLog.length - 60000);
-            }
-            this.homey.api.realtime('com.netscan.logupdated', { 'log': this.diagLog });
+
+            // numbers, booleans, bigint, symbol, function
+            return String(source);
+        } catch (err) {
+            this.homey.app.updateLog("varToString failed: " + this.homey.app.varToString(err), 0);
         }
     }
 
-    async sendLog(logType)
-    {
+    updateLog(newMessage, errorLevel = 1) {
+        if (errorLevel > this.homey.app.logLevel) return;
+
+        try { console.log(newMessage); } catch { }
+
+        const pad = (n, w) => String(n).padStart(w, '0');
+        const now = new Date();
+        const ts =
+            `${pad(now.getHours(), 2)}:` +
+            `${pad(now.getMinutes(), 2)}:` +
+            `${pad(now.getSeconds(), 2)}.` +
+            `${pad(now.getMilliseconds(), 3)}`;
+
+        const marker = errorLevel === 0 ? '!!!!!! ' : '* ';
+        const line = `${ts}: ${marker}${newMessage}\r\n`;
+
+        // append and cap to the last 60k chars
+        this.diagLog = ((this.diagLog || '') + line).slice(-60000);
+
+        this.homey.api.realtime('com.netscan.logupdated', { log: this.diagLog });
+    }
+
+    async sendLog(logType) {
         let tries = 5;
         console.log("Send Log");
-        while (tries-- > 0)
-        {
-            try
-            {
+        while (tries-- > 0) {
+            try {
                 let subject = "";
                 let text = "";
-                if (logType === 'infoLog')
-                {
+                if (logType === 'infoLog') {
                     subject = "Netscan Information log";
                     text = this.diagLog;
                 }
-                else
-                {
+                else {
                     subject = "Netscan device log";
                     text = this.detectedDevices;
                 }
@@ -188,37 +126,36 @@ class netScanApp extends Homey.App
 
                 // create reusable transporter object using the default SMTP transport
                 let transporter = nodemailer.createTransport(
-                {
-                    host: Homey.env.MAIL_HOST, //Homey.env.MAIL_HOST,
-                    port: 465,
-                    ignoreTLS: false,
-                    secure: true, // true for 465, false for other ports
-                    auth:
                     {
-                        user: Homey.env.MAIL_USER, // generated ethereal user
-                        pass: Homey.env.MAIL_SECRET // generated ethereal password
-                    },
-                    tls:
-                    {
-                        // do not fail on invalid certs
-                        rejectUnauthorized: false
-                    }
-                });
+                        host: Homey.env.MAIL_HOST, //Homey.env.MAIL_HOST,
+                        port: 465,
+                        ignoreTLS: false,
+                        secure: true, // true for 465, false for other ports
+                        auth:
+                        {
+                            user: Homey.env.MAIL_USER, // generated ethereal user
+                            pass: Homey.env.MAIL_SECRET // generated ethereal password
+                        },
+                        tls:
+                        {
+                            // do not fail on invalid certs
+                            rejectUnauthorized: false
+                        }
+                    });
                 // send mail with defined transport object
                 const response = await transporter.sendMail(
-                {
-                    from: '"Homey User" <' + Homey.env.MAIL_USER + '>', // sender address
-                    to: Homey.env.MAIL_RECIPIENT, // list of receivers
-                    subject: subject, // Subject line
-                    text: text // plain text body
-                });
+                    {
+                        from: '"Homey User" <' + Homey.env.MAIL_USER + '>', // sender address
+                        to: Homey.env.MAIL_RECIPIENT, // list of receivers
+                        subject: subject, // Subject line
+                        text: text // plain text body
+                    });
                 return {
                     error: response.err,
                     message: response.err ? null : "OK"
                 };
             }
-            catch (err)
-            {
+            catch (err) {
                 this.logInformation("Send log error", err);
                 return {
                     error: err,

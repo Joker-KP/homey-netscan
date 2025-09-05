@@ -8,44 +8,37 @@ class TcpIpDevice extends Homey.Device {
     async onInit() {
         this.fixCapabilities();
         this.initVariables();
-
         const fewSeconds = 2
         const startupDelay = this.withJitter(fewSeconds * 1000)
         this.timer = this.homey.setTimeout(this.periodicAction, startupDelay);
     }
 
     fixCapabilities() {
-        if (this.hasCapability('ip_present')) {
+        if (this.hasCapability('ip_present'))
             this.removeCapability('ip_present');
-        }
-        if (this.hasCapability('alarm_offline')) {
+        if (this.hasCapability('alarm_offline'))
             this.removeCapability('alarm_offline');
-        }
-        if (!this.hasCapability('alarm_connectivity')) {
+        if (!this.hasCapability('alarm_connectivity'))
             this.addCapability('alarm_connectivity');
-        }
-        if (this.getCapabilityValue('alarm_connectivity') === null) {
+        if (this.getCapabilityValue('alarm_connectivity') === null)
             this.setCapabilityValue('alarm_connectivity', true).catch(this.error);
-        }
         if (!this.hasCapability('onoff')) {
             this.addCapability('onoff');
-            this.setCapabilityValue('onoff', !this.getCapabilityValue('alarm_connectivity'));
+            const value = !this.getCapabilityValue('alarm_connectivity')
+            this.setCapabilityValue('onoff', value).catch(this.error);
         }
-    }
-
-    initVariables() {
         let options = this.getCapabilityOptions('onoff');
         options.setable = false;
         options.getable = true;
         options.preventInsights = true;
         options.uiComponent = null;
-        this.setCapabilityOptions('onoff', options);
+        this.setCapabilityOptions('onoff', options).catch(this.error);
+    }
 
+    initVariables() {
         this.unreachableCount = 0;
         this.timer = null;
-
         this.wasOnline = !this.getCapabilityValue('alarm_connectivity');
-
         this.host = this.getSetting('host');
         this.port = this.getSetting('tcp_port');
         this.actionInterval = this.getSetting('host_check_interval');
@@ -53,7 +46,7 @@ class TcpIpDevice extends Homey.Device {
         this.maxUnreachableAttempts = this.getSetting('host_unreachable_checks');
     }
 
-    devicceName() {
+    deviceName() {
         return this.getName() + " - " + this.host + (this.hasPortDefined() ? (": " + this.port) : "")
     }
 
@@ -84,6 +77,7 @@ class TcpIpDevice extends Homey.Device {
         return new Promise((resolve) => {
             const start = Date.now();
             const socket = new net.Socket();
+            const map = { ECONNREFUSED: 'refused', EHOSTUNREACH: 'unreach', ENOTFOUND: 'notfound', EALREADY: 'ready' };
 
             const done = (alive, reason) => {
                 try { socket.destroy(); } catch (_) { }
@@ -91,27 +85,15 @@ class TcpIpDevice extends Homey.Device {
             };
             socket.setTimeout(timeoutSec * 1000);
 
+            // use only "once", skip on(data) and on(connect) -> limit resources
             socket.once('connect', () => done(true, 'connected'));
-            // socket.on('data', (data) => {/* consume all incoming data to prevent memory leaks */});
-            // socket.once('close', () => done(true, 'close'));
             socket.once('timeout', () => done(false, 'timeout'));
             socket.once('error', (error) => {
-                if (error && error.code) {
-                    if (error.code == "ECONNREFUSED") {
-                        done(false, 'refused')
-                    } else if (error.code == "EHOSTUNREACH") {
-                        done(false, 'unreach')
-                    } else if (error.code == "ENOTFOUND") {
-                        done(false, 'notfound')
-                    } else if (error.code == "EALREADY") {
-                        done(true, 'ready')
-                    } else {
-                        done(false, 'uknown code: ' + error.code)
-                    }
-                }
-                else {
-                    done(false, 'uknown error: ' + this.homey.app.varToString(error))
-                }
+                const reason = error?.code
+                    ? (map[error.code] || `unknown code: ${error.code}`)
+                    : `unknown error: ${this.homey.app.varToString(error)}`;
+                // EALREADY => treat as online
+                done(reason === 'ready', reason);
             });
 
             socket.connect(port, host);
@@ -120,27 +102,21 @@ class TcpIpDevice extends Homey.Device {
 
     processPingResult(res) {
         let isOnline = res.online
-
-        if (res.reason === "refused" && !this.hasPortDefined()) {
+        if (res.reason === "refused" && !this.hasPortDefined())
             isOnline = true;  // this is expected behaviour for devices without any open port
-        }
-        if (res.reason === "timeout") {
-            this.homey.app.updateLog(`Device Timeout ${this.devicceName()}`);
-        }
-        if (res.reason.startsWith("uknown code") || res.reason.startsWith("uknown error")) {
-            this.homey.app.updateLog(`Response with ${res.reason} (device ${this.devicceName()} )`)
-        }
-
-        if (isOnline) {
+        if (res.reason === "timeout")
+            this.homey.app.updateLog(`Device Timeout ${this.deviceName()}`);
+        if (res.reason.startsWith("unknown code") || res.reason.startsWith("unknown error"))
+            this.homey.app.updateLog(`Response with ${res.reason} (device ${this.deviceName()} )`)
+        if (isOnline)
             this.handleOnline();
-        } else {
+        else
             this.completeAnotherAttempt();
-        }
     }
 
     periodicAction = async () => {
         const prefix = this.hasPortDefined() ? "IP" : "TCP";
-        this.homey.app.updateLog(`Checking ${prefix} device ${this.devicceName()}`);
+        this.homey.app.updateLog(`Checking ${prefix} device ${this.deviceName()}`);
 
         const default_port = 1
         const res = await this.tcpPing(this.host, this.port || default_port, this.hostTimeout);
@@ -156,7 +132,7 @@ class TcpIpDevice extends Homey.Device {
         }
         else {
             let leftCounter = this.maxUnreachableAttempts - this.unreachableCount + 1
-            this.homey.app.updateLog(`${this.devicceName()} offline postponed for ${leftCounter} more checks`);
+            this.homey.app.updateLog(`${this.deviceName()} offline postponed for ${leftCounter} more checks`);
             this.unreachableCount++;
         }
     }
@@ -165,7 +141,7 @@ class TcpIpDevice extends Homey.Device {
         let state = isOnline ? "Online" : "Offline"
 
         if ((this.wasOnline === null) || this.wasOnline != isOnline) {
-            this.homey.app.updateLog(`**** Device is now ${state} ${this.devicceName()}`);
+            this.homey.app.updateLog(`**** Device is now ${state} ${this.deviceName()}`);
             this.setCapabilityValue('alarm_connectivity', !isOnline);
             this.setCapabilityValue('onoff', isOnline);
             this.wasOnline = isOnline;
@@ -177,7 +153,7 @@ class TcpIpDevice extends Homey.Device {
                 this.driver.device_went_offline(this);
         }
         else {
-            this.homey.app.updateLog(`Device still ${state} ${this.devicceName()}`);
+            this.homey.app.updateLog(`Device still ${state} ${this.deviceName()}`);
         }
     }
 
@@ -200,26 +176,16 @@ class TcpIpDevice extends Homey.Device {
     }
 
     async onSettings({ oldSettings, newSettings, changedKeys }) {
-        if (changedKeys.indexOf("host") >= 0) {
+        if (changedKeys.indexOf("host") >= 0)
             this.host = newSettings.host;
-        }
-
-        if (changedKeys.indexOf("tcp_port") >= 0) {
+        if (changedKeys.indexOf("tcp_port") >= 0)
             this.port = newSettings.tcp_port;
-        }
-
-        if (changedKeys.indexOf("host_check_interval") >= 0) {
-            this.actionInterval = parseInt(this.actionInterval);
-        }
-
-        if (changedKeys.indexOf("host_timeout") >= 0) {
-            this.hostTimeout = parseInt(this.hostTimeout);
-        }
-
-        if (changedKeys.indexOf("host_unreachable_checks") >= 0) {
-            this.maxUnreachableAttempts = parseInt(newSettings.host_unreachable_checks);
-        }
-
+        if (changedKeys.indexOf("host_check_interval") >= 0)
+            this.actionInterval = newSettings.host_check_interval;
+        if (changedKeys.indexOf("host_timeout") >= 0)
+            this.hostTimeout = newSettings.host_timeout;
+        if (changedKeys.indexOf("host_unreachable_checks") >= 0)
+            this.maxUnreachableAttempts = newSettings.host_unreachable_checks;
         if (this.timer) {
             // cancel next planned action and start the scan immediately
             this.cleanTimer();
