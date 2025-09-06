@@ -76,34 +76,66 @@
   "flow": {
     "triggers": [
       {
-        "id": "ip_device_came_online",
         "title": {
           "en": "Device came online",
           "nl": "Apparaat kwam online",
-          "de": "Gerät ging online"
+          "de": "Gerät ging online",
+          "pl": "Urządzenie pojawiło się online"
         },
+        "highlight": true,
         "args": [
           {
-            "type": "device",
             "name": "device",
-            "filter": "driver_id=ip_driver"
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
           }
-        ]
+        ],
+        "id": "alarm_connectivity_false"
       },
       {
-        "id": "ip_device_went_offline",
         "title": {
           "en": "Device went offline",
           "nl": "Apparaat ging offline",
-          "de": "Gerät ging offline"
+          "de": "Gerät ging offline",
+          "pl": "Urządzenie utraciło łączność"
         },
         "args": [
           {
-            "type": "device",
             "name": "device",
-            "filter": "driver_id=ip_driver"
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
           }
-        ]
+        ],
+        "id": "alarm_connectivity_true"
+      },
+      {
+        "title": {
+          "en": "Device changed state",
+          "nl": "Toestand van apparaat gewijzigd",
+          "de": "Gerätezustand geändert",
+          "pl": "Zmiana stanu urządzenia"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "value",
+            "title": {
+              "en": "Device Online State",
+              "nl": "Apparaat Online Status",
+              "de": "Online-Status Gerät",
+              "pl": "Stan online urządzenia"
+            },
+            "type": "boolean",
+            "example": true
+          }
+        ],
+        "id": "device_state_changed"
       },
       {
         "id": "ip_device_change",
@@ -129,36 +161,6 @@
             },
             "type": "boolean",
             "example": true
-          }
-        ]
-      },
-      {
-        "id": "device_came_online",
-        "title": {
-          "en": "Device came online",
-          "nl": "Apparaat kwam online",
-          "de": "Gerät ging online"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tcp_driver"
-          }
-        ]
-      },
-      {
-        "id": "device_went_offline",
-        "title": {
-          "en": "Device went offline",
-          "nl": "Apparaat ging offline",
-          "de": "Gerät ging offline"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tcp_driver"
           }
         ]
       },
@@ -339,7 +341,7 @@
               "hint": "Time to wait before reporting the device is offline",
               "type": "number",
               "value": 10,
-              "min": 5,
+              "min": 2,
               "max": 100,
               "units": "seconds",
               "label": {
@@ -479,7 +481,7 @@
               },
               "type": "number",
               "value": 10,
-              "min": 5,
+              "min": 2,
               "max": 1000,
               "units": "seconds",
               "label": {

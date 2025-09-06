@@ -73,7 +73,7 @@ class TcpIpDevice extends Homey.Device {
         return this.port !== null
     }
 
-    allAttemptsExhuusted() {
+    allAttemptsExhausted() {
         return this.unreachableCount > this.maxUnreachableAttempts;
     }
 
@@ -150,7 +150,7 @@ class TcpIpDevice extends Homey.Device {
     }
 
     completeAnotherAttempt() {
-        if (this.allAttemptsExhuusted()) {
+        if (this.allAttemptsExhausted()) {
             this.handleOffline();
         }
         else {

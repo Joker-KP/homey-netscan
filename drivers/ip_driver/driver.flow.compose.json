@@ -1,24 +1,6 @@
 {
 	"triggers": [
 		{
-			"id": "ip_device_came_online",
-			"title": {
-				"en": "Device came online",
-				"nl": "Apparaat kwam online",
-				"de": "Gerät ging online"
-			},
-			"args": []
-		},
-		{
-			"id": "ip_device_went_offline",
-			"title": {
-				"en": "Device went offline",
-				"nl": "Apparaat ging offline",
-				"de": "Gerät ging offline"
-			},
-			"args": []
-		},
-		{
 			"id": "ip_device_change",
 			"title": {
 				"en": "Device changed state",

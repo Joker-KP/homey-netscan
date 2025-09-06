@@ -1,7 +1,7 @@
 "use strict";
-if (process.env.DEBUG === '1') {
-    require('inspector').open(9221, '0.0.0.0', true);
-}
+// if (process.env.DEBUG === '1') {
+//     require('inspector').open(9221, '0.0.0.0', true);
+// }
 
 const Homey = require('homey');
 const nodemailer = require("nodemailer");
@@ -11,19 +11,6 @@ class netScanApp extends Homey.App {
         this.diagLog = '';
         this.logLevel = this.homey.settings.get('logLevel') ?? 0;
         this.homey.settings.set('logLevel', this.logLevel);
-
-        // helper to register simple online/offline conditions
-        const registerDevice = (cardId, expectOnline) => {
-            this.homey.flow
-                .getConditionCard(cardId)
-                .registerRunListener(async (args, state) => {
-                    return expectOnline ? !!args.device.wasOnline : !args.device.wasOnline
-                });
-        };
-        registerDevice('ip_device_is_online', true);
-        registerDevice('ip_device_is_offline', false);
-        registerDevice('device_is_online', true);
-        registerDevice('device_is_offline', false);
 
         // on CPU warning: ask all devices to slow down if they expose slowDown()
         this.homey.on('cpuwarn', () => {
@@ -74,7 +61,7 @@ class netScanApp extends Homey.App {
 
             // objects (pretty JSON, circular-safe)
             if (typeof source === 'object') {
-                return JSON.stringify(source, circularReplacer(), 2);
+                return JSON.stringify(source, this.circularReplacer(), 2);
             }
 
             // numbers, booleans, bigint, symbol, function

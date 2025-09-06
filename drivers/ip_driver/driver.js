@@ -13,22 +13,14 @@ class ipDriver extends Homey.Driver
     async onInit()
     {
         console.info("Booting IP driver");
-
-        this.ip_device_came_online_trigger = this.homey.flow.getDeviceTriggerCard('ip_device_came_online');
-        this.ip_device_went_offline_trigger = this.homey.flow.getDeviceTriggerCard('ip_device_went_offline');
-        this.ip_device_changed_state_trigger = this.homey.flow.getDeviceTriggerCard('ip_device_change');
+        this.ip_device_changed_state_trigger = this.homey.flow.getDeviceTriggerCard('device_state_changed');
     }
 
     device_came_online(device)
     {
-        this.ip_device_came_online_trigger
-            .trigger(device)
-            .catch(this.error);
-
         let tokens = {
             value: true
         };
-
         this.ip_device_changed_state_trigger
             .trigger(device, tokens)
             .catch(this.error);
@@ -36,14 +28,9 @@ class ipDriver extends Homey.Driver
 
     device_went_offline(device)
     {
-        this.ip_device_went_offline_trigger
-            .trigger(device)
-            .catch(this.error);
-
         let tokens = {
             value: false
         };
-
         this.ip_device_changed_state_trigger
             .trigger(device, tokens)
             .catch(this.error);

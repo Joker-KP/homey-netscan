@@ -1,0 +1,29 @@
+{
+
+    "title": {
+        "en": "Device changed state",
+        "nl": "Toestand van apparaat gewijzigd",
+        "de": "Gerätezustand geändert",
+        "pl": "Zmiana stanu urządzenia"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
+        }
+    ],
+    "tokens": [
+        {
+            "name": "value",
+            "title": {
+                "en": "Device Online State",
+                "nl": "Apparaat Online Status",
+                "de": "Online-Status Gerät",
+                "pl": "Stan online urządzenia"
+            },
+            "type": "boolean",
+            "example": true
+        }
+    ]
+}

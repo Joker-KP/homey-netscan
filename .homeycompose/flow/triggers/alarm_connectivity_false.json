@@ -1,0 +1,16 @@
+{
+    "title": {
+        "en": "Device came online",
+        "nl": "Apparaat kwam online",
+        "de": "Gerät ging online",
+        "pl": "Urządzenie pojawiło się online"
+    },
+    "highlight": true,
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
+        }
+    ]
+}

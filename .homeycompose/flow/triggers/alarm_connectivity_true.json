@@ -1,0 +1,15 @@
+{
+    "title": {
+        "en": "Device went offline",
+        "nl": "Apparaat ging offline",
+        "de": "Gerät ging offline",
+        "pl": "Urządzenie utraciło łączność"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
+        }
+    ]
+}

@@ -9,22 +9,14 @@ class tcpDriver extends Homey.Driver
     async onInit()
     {
         console.info("Booting TCP driver");
-
-        this.device_came_online_trigger = this.homey.flow.getDeviceTriggerCard('device_came_online');
-        this.device_went_offline_trigger = this.homey.flow.getDeviceTriggerCard('device_went_offline');
-        this.device_changed_state_trigger = this.homey.flow.getDeviceTriggerCard('device_change');
+        this.device_changed_state_trigger = this.homey.flow.getDeviceTriggerCard('device_state_changed');
     }
 
     device_came_online(device)
     {
-        this.device_came_online_trigger
-            .trigger(device)
-            .catch(this.error);
-
         let tokens = {
             value: true
         };
-
         this.device_changed_state_trigger
             .trigger(device, tokens)
             .catch(this.error);
@@ -32,14 +24,9 @@ class tcpDriver extends Homey.Driver
 
     device_went_offline(device)
     {
-        this.device_went_offline_trigger
-            .trigger(device)
-            .catch(this.error);
-
         let tokens = {
             value: true
         };
-
         this.device_changed_state_trigger
             .trigger(device, tokens)
             .catch(this.error);
