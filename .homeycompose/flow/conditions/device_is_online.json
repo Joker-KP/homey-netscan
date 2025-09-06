@@ -1,0 +1,15 @@
+{
+    "title": {
+        "en": "Device is !{{online|offline}}",
+        "nl": "Apparaat is !{{online|offline}}",
+        "de": "Gerät ist !{{online|offline}}",
+        "pl": "Urządzenie jest !{{online|offline}}"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
+        }
+    ]
+}

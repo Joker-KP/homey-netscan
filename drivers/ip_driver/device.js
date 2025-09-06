@@ -1,23 +1,17 @@
 /*jslint node: true */
 'use strict';
 
-const Homey = require('homey');
-var net = require("net");
-const TcpIpDevice = require('../tcp_ip_device');
+const TcpIpDevice = require('../../lib/device');
 
-class ipDevice extends TcpIpDevice
-{
-    async onInit()
-    {
+module.exports = class ipDevice extends TcpIpDevice {
+    async onInit() {
         this.homey.app.updateLog("Booting IP device " + this.getName());
         super.onInit();
     }
 
-    async onAdded()
-    {
+    async onAdded() {
         this.port = null;
-        await this.setSettings({'tcp_port': this.port});
+        await this.setSettings({ 'tcp_port': this.port });
     }
 
 }
-module.exports = ipDevice;

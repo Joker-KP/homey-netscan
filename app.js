@@ -12,6 +12,17 @@ class netScanApp extends Homey.App {
         this.logLevel = this.homey.settings.get('logLevel') ?? 0;
         this.homey.settings.set('logLevel', this.logLevel);
 
+        // helper to register simple online/offline conditions
+        const registerDeviceCondition = (cardId, expectOnline) => {
+            this.homey.flow
+                .getConditionCard(cardId)
+                .registerRunListener(async (args, state) => {
+                    return expectOnline ? !!args.device.wasOnline : !args.device.wasOnline
+                });
+        };
+        registerDeviceCondition('device_is_online', true);
+        registerDeviceCondition('device_is_offline', false);
+
         // on CPU warning: ask all devices to slow down if they expose slowDown()
         this.homey.on('cpuwarn', () => {
             const drivers = this.homey.drivers.getDrivers();

@@ -136,122 +136,41 @@
           }
         ],
         "id": "device_state_changed"
-      },
-      {
-        "id": "ip_device_change",
-        "title": {
-          "en": "Device changed state",
-          "nl": "Toestand van apparaat gewijzigd",
-          "de": "Gerätezustand geändert"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=ip_driver"
-          }
-        ],
-        "tokens": [
-          {
-            "name": "value",
-            "title": {
-              "en": "Device Online State",
-              "nl": "Apparaat Online Status",
-              "de": "Online-Status Gerät"
-            },
-            "type": "boolean",
-            "example": true
-          }
-        ]
-      },
-      {
-        "id": "device_change",
-        "title": {
-          "en": "Device changed state",
-          "nl": "Toestand van apparaat gewijzigd",
-          "de": "Zustand des Geräts geändert"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=tcp_driver"
-          }
-        ],
-        "tokens": [
-          {
-            "name": "value",
-            "title": {
-              "en": "Device Online State"
-            },
-            "type": "boolean",
-            "example": true
-          }
-        ]
       }
     ],
     "conditions": [
       {
-        "id": "ip_device_is_online",
-        "title": {
-          "en": "Device is !{{online|offline}}",
-          "nl": "Apparaat is !{{online|offline}}",
-          "de": "Gerät ist !{{online|offline}}"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=ip_driver"
-          }
-        ]
-      },
-      {
-        "id": "ip_device_is_offline",
         "title": {
           "en": "Device is !{{offline|online}}",
           "nl": "Apparaat is !{{offline|online}}",
-          "de": "Gerät ist !{{offline|online}}"
+          "de": "Gerät ist !{{offline|online}}",
+          "pl": "Urządzenie jest !{{offline|online}}"
         },
         "args": [
           {
-            "type": "device",
             "name": "device",
-            "filter": "driver_id=ip_driver"
+            "type": "device",
+            "filter": "driver_id=ip_driver|tcp_driver"
           }
         ],
-        "deprecated": true
+        "deprecated": true,
+        "id": "device_is_offline"
       },
       {
-        "id": "device_is_online",
         "title": {
           "en": "Device is !{{online|offline}}",
           "nl": "Apparaat is !{{online|offline}}",
-          "de": "Gerät ist !{{online|offline}}"
+          "de": "Gerät ist !{{online|offline}}",
+          "pl": "Urządzenie jest !{{online|offline}}"
         },
         "args": [
           {
-            "type": "device",
             "name": "device",
-            "filter": "driver_id=tcp_driver"
-          }
-        ]
-      },
-      {
-        "id": "device_is_offline",
-        "title": {
-          "en": "Device is !{{offline|online}}",
-          "nl": "Apparaat is !{{offline|online}}",
-          "de": "Gerät ist !{{offline|online}}"
-        },
-        "args": [
-          {
             "type": "device",
-            "name": "device",
-            "filter": "driver_id=tcp_driver"
+            "filter": "driver_id=ip_driver|tcp_driver"
           }
         ],
-        "deprecated": true
+        "id": "device_is_online"
       }
     ]
   },

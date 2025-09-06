@@ -1,47 +1,11 @@
 "use strict";
 
-// The IP driver works by connecting to a port and checking which error response one gets.
-// We have to assume a port is closed, this assumption is corrected if a device appears to have the port open anyway.
-
-// https://www.tutorialspoint.com/nodejs/nodejs_net_module.htm
-var net = require("net");
 const Homey = require('homey');
+const ConnectivityDriver = require('../../lib/driver');
 
-class ipDriver extends Homey.Driver
-{
-    // the `init` method is called when your driver is loaded for the first time
-    async onInit()
-    {
+module.exports = class ipDriver extends ConnectivityDriver {
+    async onInit() {
         console.info("Booting IP driver");
-        this.ip_device_changed_state_trigger = this.homey.flow.getDeviceTriggerCard('device_state_changed');
+        super.onInit();
     }
-
-    device_came_online(device)
-    {
-        let tokens = {
-            value: true
-        };
-        this.ip_device_changed_state_trigger
-            .trigger(device, tokens)
-            .catch(this.error);
-    }
-
-    device_went_offline(device)
-    {
-        let tokens = {
-            value: false
-        };
-        this.ip_device_changed_state_trigger
-            .trigger(device, tokens)
-            .catch(this.error);
-    }
-
-    // the `pair` method is called when a user start pairing
-    async onPairListDevices()
-    {
-        this.homey.app.updateLog("Pairing started");
-
-    }
-
 }
-module.exports = ipDriver;
