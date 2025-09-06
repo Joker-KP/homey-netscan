@@ -1,16 +1,15 @@
 /*jslint node: true */
+const utils = require('./lib/utils')
+
 module.exports = {
-    async getLog({ homey, query })
-    {
+    async getLog({ homey, query }) {
         return homey.app.diagLog;
     },
-    async clearLog({ homey, query })
-    {
+    async clearLog({ homey, query }) {
         homey.app.diagLog = "";
         return 'OK';
     },
-    async SendInfoLog({ homey, query })
-    {
+    async SendInfoLog({ homey, query }) {
         return homey.app.sendLog('infoLog');
     },
 };

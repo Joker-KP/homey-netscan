@@ -3,7 +3,7 @@
 
 const TcpIpDevice = require('../../lib/device');
 
-module.exports = class ipDevice extends TcpIpDevice {
+module.exports = class IpDevice extends TcpIpDevice {
     async onInit() {
         this.homey.app.updateLog("Booting IP device " + this.getName());
         super.onInit();

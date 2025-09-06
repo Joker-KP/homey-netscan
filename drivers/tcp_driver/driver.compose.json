@@ -2,7 +2,8 @@
 	"name": {
 		"en": "TCP port",
 		"nl": "TCP poort",
-		"de": "TCP-Port"
+		"de": "TCP-Port",
+		"pl": "Port TCP"
 	},
 	"platforms": [
 		"local"
@@ -19,10 +20,14 @@
 		"alarm_connectivity": {
 			"insightsTitleFalse": {
 				"en": "Connection restored",
+				"nl": "Verbinding hersteld",
+				"de": "Verbindung wiederhergestellt",
 				"pl": "Połączenie przywrócono"
 			},
 			"insightsTitleTrue": {
 				"en": "Connection lost",
+				"nl": "Verbinding verbroken",
+				"de": "Verbindung verloren",
 				"pl": "Utracono połączenie"
 			}
 		},
@@ -50,7 +55,8 @@
 			"label": {
 				"en": "Port scan settings",
 				"nl": "Port scan instellingen",
-				"de": "Port-Scan-Einstellungen"
+				"de": "Port-Scan-Einstellungen",
+				"pl": "Ustawienia skonowania portu"
 			},
 			"children": [
 				{
@@ -58,14 +64,16 @@
 					"hint": {
 						"en": "IP address of the device to check",
 						"nl": "IP adres van het apparaat om te controleren",
-						"de": "IP-Adresse des zu überprüfenden Geräts"
+						"de": "IP-Adresse des zu überprüfenden Geräts",
+						"pl": "Adres IP urządzenia do monitorowania"
 					},
 					"type": "text",
 					"value": "0.0.0.0",
 					"label": {
 						"en": "IP address",
 						"nl": "IP adres",
-						"de": "IP-Adresse"
+						"de": "IP-Adresse",
+						"pl": "Adres IP"
 					}
 				},
 				{
@@ -73,14 +81,16 @@
 					"hint": {
 						"en": "Port number on check on the device",
 						"nl": "Poortnummer om te controleren op het apparaat",
-						"de": "Portnummer des zu überprüfenden Geräts"
+						"de": "Portnummer des zu überprüfenden Geräts",
+						"pl": "Numer portu do sprawdzania na urządzeniu"
 					},
 					"type": "number",
 					"value": 9090,
 					"label": {
 						"en": "TCP port",
 						"nl": "TCP poort",
-						"de": "TCP-Port"
+						"de": "TCP-Port",
+						"pl": "Port TCP"
 					},
 					"max": 65535
 				},
@@ -89,17 +99,24 @@
 					"hint": {
 						"en": "Time between checks for the device",
 						"nl": "Tijd tussen controles voor het apparaat",
-						"de": "Zeit zwischen den Überprüfungen des Geräts"
+						"de": "Zeit zwischen den Überprüfungen des Geräts",
+						"pl": "Czas pomiędzy kolejnymi próbami kontaktu z urządzeniem"
 					},
 					"type": "number",
 					"value": 15,
 					"min": 5,
 					"max": 100,
-					"units": "seconds",
+                    "units": {
+                        "en": "seconds",
+                        "nl": "seconden",
+                        "de": "Sekunden",
+                        "pl": "sekundy"
+                    },
 					"label": {
 						"en": "Check Interval",
 						"nl": "Controleer interval",
-						"de": "Prüfintervall"
+						"de": "Prüfintervall",
+						"pl": "Interwał sprawdzania"
 					}
 				},
 				{
@@ -107,17 +124,24 @@
 					"hint": {
 						"en": "Time to wait before reporting the device is offline",
 						"nl": "Tijd om te wachten voordat het apparaat offline wordt gerapporteerd",
-						"de": "Zeit bis zur Offline-Meldung des Geräts"
+						"de": "Zeit bis zur Offline-Meldung des Geräts",
+						"pl": "Czas, po którym urządzenie zostanie uznane za niedostępne"
 					},
 					"type": "number",
 					"value": 10,
 					"min": 2,
 					"max": 1000,
-					"units": "seconds",
+                    "units": {
+                        "en": "seconds",
+                        "nl": "seconden",
+                        "de": "Sekunden",
+                        "pl": "sekundy"
+                    },
 					"label": {
 						"en": "Check Timeout",
 						"nl": "Controleer time-out",
-						"de": "Zeitüberschreitung"
+						"de": "Zeitüberschreitung",
+						"pl": "Limit czasu sprawdzania"
 					}
 				},
 				{
@@ -125,7 +149,8 @@
 					"hint": {
 						"en": "Number of unreachable failures before reporting the device is offline",
 						"nl": "Aantal onbereikbare fouten voordat het apparaat offline wordt gerapporteerd",
-						"de": "Anzahl der Fehlversuche bis zur Offline-Meldung des Geräts"
+						"de": "Anzahl der Fehlversuche bis zur Offline-Meldung des Geräts",
+						"pl": "Liczba ponowień sprawdzenia, po której urządzenie zostanie zaraportowane jako nieosiągalne"
 					},
 					"type": "number",
 					"value": 1,
@@ -134,7 +159,8 @@
 					"label": {
 						"en": "Unreachable checks",
 						"nl": "Onbereikbare controles",
-						"de": "Anzahl Erreichbarkeits-Prüfungen"
+						"de": "Anzahl Erreichbarkeits-Prüfungen",
+						"pl": "Liczba ponowień sprawdzenia"
 					}
 				}
 			]

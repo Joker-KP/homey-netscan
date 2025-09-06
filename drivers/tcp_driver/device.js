@@ -3,9 +3,9 @@
 
 const TcpIpDevice = require('../../lib/device');
 
-module.exports = class tcpDevice extends TcpIpDevice {
+module.exports = class TcpDevice extends TcpIpDevice {
     async onInit() {
-        console.info("Booting TCP device ", this.getName());
+        this.homey.app.updateLog("Booting TCP device " + this.getName());
         super.onInit();
     }
 }
