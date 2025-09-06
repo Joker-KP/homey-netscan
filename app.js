@@ -1,12 +1,12 @@
 "use strict";
-// if (process.env.DEBUG === '1') {
-//     require('inspector').open(9221, '0.0.0.0', true);
-// }
+if (process.env.DEBUG === '1') {
+    require('inspector').open(9221, '0.0.0.0', true);
+}
 
 const Homey = require('homey');
 const nodemailer = require("nodemailer");
 
-class netScanApp extends Homey.App {
+module.exports = class NetScanApp extends Homey.App {
     async onInit() {
         this.diagLog = '';
         this.logLevel = this.homey.settings.get('logLevel') ?? 0;
@@ -43,43 +43,6 @@ class netScanApp extends Homey.App {
                 this.homey.app.logLevel = this.homey.settings.get('logLevel') ?? 0;
             }
         });
-    }
-
-    circularReplacer = () => {
-        const seen = new WeakSet();
-        return (_key, value) => {
-            if (value && typeof value === 'object') {
-                if (seen.has(value)) return '[Circular]';
-                seen.add(value);
-            }
-            return value;
-        };
-    }
-
-    varToString(source) {
-        try {
-            // null or undefined
-            if (source == null) return String(source);
-
-            // Error objects
-            if (source instanceof Error) {
-                const stack = String(source.stack || '').replace(/\r?\n/g, '\n');
-                return `${source.name}: ${source.message}${stack ? `\n${stack}` : ''}`;
-            }
-
-            // strings pass through
-            if (typeof source === 'string') return source;
-
-            // objects (pretty JSON, circular-safe)
-            if (typeof source === 'object') {
-                return JSON.stringify(source, this.circularReplacer(), 2);
-            }
-
-            // numbers, booleans, bigint, symbol, function
-            return String(source);
-        } catch (err) {
-            this.homey.app.updateLog("varToString failed: " + this.homey.app.varToString(err), 0);
-        }
     }
 
     updateLog(newMessage, errorLevel = 1) {
@@ -163,4 +126,3 @@ class netScanApp extends Homey.App {
         }
     }
 }
-module.exports = netScanApp;
