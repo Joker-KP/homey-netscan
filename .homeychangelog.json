@@ -34,5 +34,8 @@
   },
   "2.0.8": {
     "en": "Fixed 'Invert' option on 'Is OnLine' condition card. Deprecated 'Is Offline' condition card."
+  },
+  "3.0.0": {
+    "en": "Check intervals have random delays (jitter) to minimize network thundering and CPU usage. Using Homey alarm_connectivity and in-build flow cards for this capability (breaking change, depends on version >=12.2.0). Insights for onoff capability disabled for clarity (alarm insights duplication). Polish translation added. Huge code refactor following DRY."
   }
 }

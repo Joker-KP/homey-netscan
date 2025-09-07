@@ -10,6 +10,7 @@
             "tcp_port": "TCP port",
             "configure": "Configure",
             "explanation": "Watch a TCP port on a specific IP address.",
+            "ip_explanation": "Watch a specific IP address.",
             "tcp_port_invalid": "The specified TCP port is invalid. Should be between 1 and 65535"
         }
     }

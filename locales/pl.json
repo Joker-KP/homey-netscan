@@ -10,6 +10,7 @@
             "tcp_port": "Port TCP",
             "configure": "Skonfiguruj",
             "explanation": "Obserwuj port TCP wybranego adresu IP.",
+            "ip_explanation": "Obserwuj dostępność wybranego adresu IP.",
             "tcp_port_invalid": "Podany numer portu TCP jest niepoprawny. Powinien być w zakresie od 1 do 65535."
         }
     }
