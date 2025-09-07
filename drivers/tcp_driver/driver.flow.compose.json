@@ -1,0 +1,44 @@
+{
+    "triggers": [
+        {
+            "id": "device_came_online",
+            "title": {
+                "en": "Device came online",
+                "nl": "Apparaat kwam online",
+                "de": "Gerät ging online"
+            },
+            "args": [],
+            "deprecated": true
+        },
+        {
+            "id": "device_went_offline",
+            "title": {
+                "en": "Device went offline",
+                "nl": "Apparaat ging offline",
+                "de": "Gerät ging offline"
+            },
+            "args": [],
+            "deprecated": true
+        },
+        {
+            "id": "device_change",
+            "title": {
+                "en": "Device changed state",
+                "nl": "Toestand van apparaat gewijzigd",
+				"de": "Zustand des Geräts geändert"
+            },
+            "args": [],
+            "deprecated": true,
+            "tokens": [
+                {
+                    "name": "value",
+                    "title": {
+                        "en": "Device Online State"
+                    },
+                    "type": "boolean",
+                    "example": true
+                }
+            ]
+        }
+    ]
+}

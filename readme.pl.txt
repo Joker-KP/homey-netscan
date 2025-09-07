@@ -3,4 +3,4 @@ Upewnij się tylko, że urządzenie ma przypisany stały adres IP, a aplikacja s
 
 Uwaga: Niektóre urządzenia rozłączają się z siecią, gdy nie są używane, co może powodować fałszywe alarmy.
 
-Pierwowzór aplikacji opracował Terry Hendrixa.
+Pierwowzór aplikacji opracował Terry Hendrix.

@@ -21,7 +21,9 @@ module.exports = class NetScanApp extends Homey.App {
                 });
         };
         registerDeviceCondition('device_is_online', true);
-        registerDeviceCondition('device_is_offline', false);
+        registerDeviceCondition('device_is_offline', false);  // deprecated
+        registerDeviceCondition('ip_device_is_online', true);  // deprecated
+        registerDeviceCondition('ip_device_is_offline', false);  // deprecated
 
         // on CPU warning: ask all devices to slow down if they expose slowDown()
         this.homey.on('cpuwarn', () => {
