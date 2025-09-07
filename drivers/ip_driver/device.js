@@ -13,5 +13,4 @@ module.exports = class IpDevice extends TcpIpDevice {
         this.port = null;
         await this.setSettings({ 'tcp_port': this.port });
     }
-
 }

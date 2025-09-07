@@ -1,0 +1,18 @@
+{
+    "id": "host",
+    "hint": {
+        "en": "IP address of the device to check",
+        "nl": "IP adres van het apparaat om te controleren",
+        "de": "IP-Adresse des zu überprüfenden Geräts",
+        "pl": "Adres IP urządzenia do monitorowania"
+    },
+    "type": "text",
+    "value": "0.0.0.0",
+    "label": {
+        "en": "IP address",
+        "nl": "IP adres",
+        "de": "IP-Adresse",
+        "pl": "Adres IP"
+    },
+    "pattern": "^([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(([0-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){2}([0-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$"
+}

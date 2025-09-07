@@ -1,0 +1,22 @@
+{
+    "capabilitiesOptions": {
+        "alarm_connectivity": {
+            "insightsTitleFalse": {
+                "en": "Connection restored",
+                "nl": "Verbinding hersteld",
+                "de": "Verbindung wiederhergestellt",
+                "pl": "Połączenie przywrócono"
+            },
+            "insightsTitleTrue": {
+                "en": "Connection lost",
+                "nl": "Verbinding verbroken",
+                "de": "Verbindung verloren",
+                "pl": "Utracono połączenie"
+            }
+        },
+        "onoff": {
+            "preventInsights": true,
+            "uiComponent": null
+        }
+    }
+}

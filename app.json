@@ -176,23 +176,6 @@
   },
   "drivers": [
     {
-      "name": {
-        "en": "IP address",
-        "nl": "IP adres",
-        "de": "IP-Adresse",
-        "pl": "Adres IP"
-      },
-      "platforms": [
-        "local"
-      ],
-      "connectivity": [
-        "lan"
-      ],
-      "class": "sensor",
-      "capabilities": [
-        "alarm_connectivity",
-        "onoff"
-      ],
       "capabilitiesOptions": {
         "alarm_connectivity": {
           "insightsTitleFalse": {
@@ -213,6 +196,23 @@
           "uiComponent": null
         }
       },
+      "name": {
+        "en": "IP address",
+        "nl": "IP adres",
+        "de": "IP-Adresse",
+        "pl": "Adres IP"
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "class": "sensor",
+      "capabilities": [
+        "alarm_connectivity",
+        "onoff"
+      ],
       "images": {
         "large": "assets/drivers/ip_driver/large.png",
         "small": "assets/drivers/ip_driver/small.png"
@@ -251,7 +251,8 @@
                 "nl": "IP adres",
                 "de": "IP-Adresse",
                 "pl": "Adres IP"
-              }
+              },
+              "pattern": "^([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(([0-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){2}([0-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$"
             },
             {
               "id": "host_check_interval",
@@ -265,12 +266,6 @@
               "value": 15,
               "min": 5,
               "max": 1000,
-              "units": {
-                "en": "seconds",
-                "nl": "seconden",
-                "de": "Sekunden",
-                "pl": "sekundy"
-              },
               "label": {
                 "en": "Check Interval",
                 "nl": "Controleer interval",
@@ -289,13 +284,7 @@
               "type": "number",
               "value": 10,
               "min": 2,
-              "max": 100,
-              "units": {
-                "en": "seconds",
-                "nl": "seconden",
-                "de": "Sekunden",
-                "pl": "sekundy"
-              },
+              "max": 1000,
               "label": {
                 "en": "Check Timeout",
                 "nl": "Controleer time-out",
@@ -328,23 +317,6 @@
       "id": "ip_driver"
     },
     {
-      "name": {
-        "en": "TCP port",
-        "nl": "TCP poort",
-        "de": "TCP-Port",
-        "pl": "Port TCP"
-      },
-      "platforms": [
-        "local"
-      ],
-      "connectivity": [
-        "lan"
-      ],
-      "class": "sensor",
-      "capabilities": [
-        "alarm_connectivity",
-        "onoff"
-      ],
       "capabilitiesOptions": {
         "alarm_connectivity": {
           "insightsTitleFalse": {
@@ -365,6 +337,23 @@
           "uiComponent": null
         }
       },
+      "name": {
+        "en": "TCP port",
+        "nl": "TCP poort",
+        "de": "TCP-Port",
+        "pl": "Port TCP"
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "class": "sensor",
+      "capabilities": [
+        "alarm_connectivity",
+        "onoff"
+      ],
       "images": {
         "large": "assets/drivers/tcp_driver/large.png",
         "small": "assets/drivers/tcp_driver/small.png"
@@ -403,7 +392,8 @@
                 "nl": "IP adres",
                 "de": "IP-Adresse",
                 "pl": "Adres IP"
-              }
+              },
+              "pattern": "^([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(([0-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){2}([0-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$"
             },
             {
               "id": "tcp_port",
@@ -434,13 +424,7 @@
               "type": "number",
               "value": 15,
               "min": 5,
-              "max": 100,
-              "units": {
-                "en": "seconds",
-                "nl": "seconden",
-                "de": "Sekunden",
-                "pl": "sekundy"
-              },
+              "max": 1000,
               "label": {
                 "en": "Check Interval",
                 "nl": "Controleer interval",
@@ -460,12 +444,6 @@
               "value": 10,
               "min": 2,
               "max": 1000,
-              "units": {
-                "en": "seconds",
-                "nl": "seconden",
-                "de": "Sekunden",
-                "pl": "sekundy"
-              },
               "label": {
                 "en": "Check Timeout",
                 "nl": "Controleer time-out",

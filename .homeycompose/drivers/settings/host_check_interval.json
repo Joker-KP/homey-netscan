@@ -1,0 +1,22 @@
+{
+    "id": "host_check_interval",
+    "hint": {
+        "en": "Time between checks for the device",
+        "nl": "Tijd tussen controles voor het apparaat",
+        "de": "Zeit zwischen den Überprüfungen des Geräts",
+        "pl": "Czas pomiędzy kolejnymi próbami kontaktu z urządzeniem"
+    },
+    "type": "number",
+    "value": 15,
+    "min": 5,
+    "max": 1000,
+    "$extends": [
+        "seconds"
+    ],
+    "label": {
+        "en": "Check Interval",
+        "nl": "Controleer interval",
+        "de": "Prüfintervall",
+        "pl": "Interwał sprawdzania"
+    }
+}

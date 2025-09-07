@@ -1,0 +1,19 @@
+{
+    "id": "host_unreachable_checks",
+    "hint": {
+        "en": "Number of unreachable failures before reporting the device is offline",
+        "nl": "Aantal onbereikbare fouten voordat het apparaat offline wordt gerapporteerd",
+        "de": "Anzahl der Fehlversuche bis zur Offline-Meldung des Geräts",
+        "pl": "Liczba ponowień sprawdzenia, po której urządzenie zostanie zaraportowane jako nieosiągalne"
+    },
+    "type": "number",
+    "value": 1,
+    "min": 1,
+    "max": 100,
+    "label": {
+        "en": "Unreachable checks",
+        "nl": "Onbereikbare controles",
+        "de": "Anzahl Erreichbarkeits-Prüfungen",
+        "pl": "Liczba ponowień sprawdzenia"
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "id": "tcp_port",
+    "hint": {
+        "en": "Port number on check on the device",
+        "nl": "Poortnummer om te controleren op het apparaat",
+        "de": "Portnummer des zu überprüfenden Geräts",
+        "pl": "Numer portu do sprawdzania na urządzeniu"
+    },
+    "type": "number",
+    "value": 9090,
+    "label": {
+        "en": "TCP port",
+        "nl": "TCP poort",
+        "de": "TCP-Port",
+        "pl": "Port TCP"
+    },
+    "max": 65535
+}

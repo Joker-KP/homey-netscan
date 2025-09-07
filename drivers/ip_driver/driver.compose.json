@@ -16,26 +16,9 @@
         "alarm_connectivity",
         "onoff"
     ],
-    "capabilitiesOptions": {
-        "alarm_connectivity": {
-            "insightsTitleFalse": {
-                "en": "Connection restored",
-                "nl": "Verbinding hersteld",
-                "de": "Verbindung wiederhergestellt",
-                "pl": "Połączenie przywrócono"
-            },
-            "insightsTitleTrue": {
-                "en": "Connection lost",
-                "nl": "Verbinding verbroken",
-                "de": "Verbindung verloren",
-                "pl": "Utracono połączenie"
-            }
-        },
-        "onoff": {
-            "preventInsights": true,
-            "uiComponent": null
-        }
-    },
+    "$extends": [
+        "capabilitiesOptions"
+    ],
     "images": {
         "large": "assets/drivers/ip_driver/large.png",
         "small": "assets/drivers/ip_driver/small.png"
@@ -60,90 +43,16 @@
             },
             "children": [
                 {
-                    "id": "host",
-                    "hint": {
-                        "en": "IP address of the device to check",
-                        "nl": "IP adres van het apparaat om te controleren",
-                        "de": "IP-Adresse des zu überprüfenden Geräts",
-                        "pl": "Adres IP urządzenia do monitorowania"
-                    },
-                    "type": "text",
-                    "value": "0.0.0.0",
-                    "label": {
-                        "en": "IP address",
-                        "nl": "IP adres",
-                        "de": "IP-Adresse",
-                        "pl": "Adres IP"
-                    }
+                    "$extends": "host"
                 },
                 {
-                    "id": "host_check_interval",
-                    "hint": {
-                        "en": "Time between checks for the device",
-                        "nl": "Tijd tussen controles voor het apparaat",
-                        "de": "Zeit zwischen den Überprüfungen des Geräts",
-                        "pl": "Czas pomiędzy kolejnymi próbami kontaktu z urządzeniem"
-                    },
-                    "type": "number",
-                    "value": 15,
-                    "min": 5,
-                    "max": 1000,
-                    "units": {
-                        "en": "seconds",
-                        "nl": "seconden",
-                        "de": "Sekunden",
-                        "pl": "sekundy"
-                    },
-                    "label": {
-                        "en": "Check Interval",
-                        "nl": "Controleer interval",
-                        "de": "Prüfintervall",
-                        "pl": "Interwał sprawdzania"
-                    }
+                    "$extends": "host_check_interval"
                 },
                 {
-                    "id": "host_timeout",
-                    "hint": {
-                        "en": "Time to wait before reporting the device is offline",
-                        "nl": "Tijd om te wachten voordat het apparaat offline wordt gerapporteerd",
-                        "de": "Zeit bis zur Offline-Meldung des Geräts",
-                        "pl": "Czas, po którym urządzenie zostanie uznane za niedostępne"
-                    },
-                    "type": "number",
-                    "value": 10,
-                    "min": 2,
-                    "max": 100,
-                    "units": {
-                        "en": "seconds",
-                        "nl": "seconden",
-                        "de": "Sekunden",
-                        "pl": "sekundy"
-                    },
-                    "label": {
-                        "en": "Check Timeout",
-                        "nl": "Controleer time-out",
-                        "de": "Zeitüberschreitung",
-                        "pl": "Limit czasu sprawdzania"
-                    }
+                    "$extends": "host_timeout"
                 },
                 {
-                    "id": "host_unreachable_checks",
-                    "hint": {
-                        "en": "Number of unreachable failures before reporting the device is offline",
-                        "nl": "Aantal onbereikbare fouten voordat het apparaat offline wordt gerapporteerd",
-                        "de": "Anzahl der Fehlversuche bis zur Offline-Meldung des Geräts",
-                        "pl": "Liczba ponowień sprawdzenia, po której urządzenie zostanie zaraportowane jako nieosiągalne"
-                    },
-                    "type": "number",
-                    "value": 1,
-                    "min": 1,
-                    "max": 100,
-                    "label": {
-                        "en": "Unreachable checks",
-                        "nl": "Onbereikbare controles",
-                        "de": "Anzahl Erreichbarkeits-Prüfungen",
-                        "pl": "Liczba ponowień sprawdzenia"
-                    }
+                    "$extends": "host_unreachable_checks"
                 }
             ]
         }

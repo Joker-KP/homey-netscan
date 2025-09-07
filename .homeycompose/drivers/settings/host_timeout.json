@@ -1,0 +1,22 @@
+{
+    "id": "host_timeout",
+    "hint": {
+        "en": "Time to wait before reporting the device is offline",
+        "nl": "Tijd om te wachten voordat het apparaat offline wordt gerapporteerd",
+        "de": "Zeit bis zur Offline-Meldung des Geräts",
+        "pl": "Czas, po którym urządzenie zostanie uznane za niedostępne"
+    },
+    "type": "number",
+    "value": 10,
+    "min": 2,
+    "max": 1000,
+    "$extends": [
+        "seconds"
+    ],
+    "label": {
+        "en": "Check Timeout",
+        "nl": "Controleer time-out",
+        "de": "Zeitüberschreitung",
+        "pl": "Limit czasu sprawdzania"
+    }
+}
